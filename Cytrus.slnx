@@ -1,2 +1,5 @@
 <Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Cytrus/Cytrus.csproj" />
+  </Folder>
 </Solution>
