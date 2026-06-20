@@ -5,6 +5,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <NoWarn>$(NoWarn);CA1822;CA1001</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
