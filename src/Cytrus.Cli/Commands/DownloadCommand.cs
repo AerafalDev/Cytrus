@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
 using Cytrus.Assembly;
+using Cytrus.Cli.Download;
 using Cytrus.Download;
 using Cytrus.Models;
 using Spectre.Console;
