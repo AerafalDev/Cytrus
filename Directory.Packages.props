@@ -37,4 +37,14 @@
     <PackageVersion Include="Serilog.AspNetCore" Version="10.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageVersion Include="Avalonia" Version="12.0.4" />
+    <PackageVersion Include="Avalonia.Desktop" Version="12.0.4" />
+    <PackageVersion Include="Avalonia.Fonts.Inter" Version="12.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageVersion Include="ShadUI" Version="0.2.3" />
+  </ItemGroup>
+
 </Project>
