@@ -30,4 +30,8 @@
     <FlatSharpSchema Include="FlatBuffers\Manifest.fbs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="Cytrus.Tests" />
+  </ItemGroup>
+
 </Project>
