@@ -7,16 +7,16 @@ public readonly struct HashId : IEquatable<HashId>
     private readonly byte[] _bytes;
 
     public bool IsEmpty =>
-        _bytes.Length is 0;
+        _bytes is null || _bytes.Length is 0;
 
     public ReadOnlySpan<byte> Span =>
         _bytes;
 
     public int Length =>
-        _bytes.Length;
+        _bytes?.Length ?? 0;
 
     public string Hex =>
-        Convert.ToHexStringLower(_bytes);
+        _bytes is null ? string.Empty : Convert.ToHexStringLower(_bytes);
 
     public string ShardPrefix =>
         Hex.Length >= 2 ? Hex[..2] : Hex;
