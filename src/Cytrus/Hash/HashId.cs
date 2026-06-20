@@ -31,9 +31,9 @@ public readonly struct HashId : IEquatable<HashId>
         return new HashId(Convert.FromHexString(hex));
     }
 
-    public static HashId FromMemory(ReadOnlyMemory<byte> memory)
+    public static HashId FromMemory(ReadOnlyMemory<byte>? memory)
     {
-        return new HashId(memory.Span);
+        return memory is { } m ? new HashId(m.Span) : new HashId([]);
     }
 
     public bool Equals(HashId other)
