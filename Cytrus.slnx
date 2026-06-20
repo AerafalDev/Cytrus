@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/Cytrus.Cli/Cytrus.Cli.csproj" />
+    <Project Path="src/Cytrus.Tests/Cytrus.Tests.csproj" />
     <Project Path="src/Cytrus/Cytrus.csproj" />
   </Folder>
 </Solution>
