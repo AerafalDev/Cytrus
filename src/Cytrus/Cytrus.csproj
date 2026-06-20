@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
+    <NoWarn>$(NoWarn);CA5350</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
