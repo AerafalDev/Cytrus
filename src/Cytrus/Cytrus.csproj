@@ -31,4 +31,8 @@
     <PackageReference Include="Serilog.AspNetCore" />
   </ItemGroup>
 
+  <ItemGroup>
+    <FlatSharpSchema Include="FlatBuffers\Manifest.fbs" />
+  </ItemGroup>
+
 </Project>

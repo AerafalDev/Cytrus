@@ -1,0 +1,36 @@
+﻿attribute "fs_serializer";
+attribute "fs_vector";
+
+namespace Cytrus.Manifests;
+
+table Manifest (fs_serializer:"Lazy") {
+    fragments: [Fragment];
+}
+
+table Fragment {
+    name: string;
+    files: [File];
+    bundles: [Bundle];
+}
+
+table Bundle {
+    hash: [ubyte] (fs_vector:"Memory");
+    chunks: [Chunk];
+}
+
+table File {
+    name: string;
+    size: int64;
+    hash: [ubyte] (fs_vector:"Memory");
+    chunks: [Chunk];
+    executable: bool;
+    symlink: string;
+}
+
+table Chunk {
+    hash: [ubyte] (fs_vector:"Memory");
+    size: int64;
+    offset: int64;
+}
+
+root_type Manifest;
