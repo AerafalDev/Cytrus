@@ -2,7 +2,7 @@
 using Spectre.Console;
 using Spectre.Console.Cli;
 
-namespace Cytrus.Cli;
+namespace Cytrus.Cli.Commands;
 
 public class TargetSettings : CommandSettings
 {
