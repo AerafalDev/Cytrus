@@ -6,6 +6,7 @@
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <NoWarn>$(NoWarn);CA1822;CA1001</NoWarn>
+    <AssemblyName>cytrus-gui</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
