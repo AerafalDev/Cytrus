@@ -1,6 +1,6 @@
 ﻿using Spectre.Console.Cli;
 
-namespace Cytrus.Cli;
+namespace Cytrus.Cli.Services;
 
 public sealed class TypeResolver(IServiceProvider provider) : ITypeResolver, IDisposable
 {

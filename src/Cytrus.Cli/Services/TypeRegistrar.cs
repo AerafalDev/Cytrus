@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console.Cli;
 
-namespace Cytrus.Cli;
+namespace Cytrus.Cli.Services;
 
 public sealed class TypeRegistrar(IServiceCollection services) : ITypeRegistrar
 {
