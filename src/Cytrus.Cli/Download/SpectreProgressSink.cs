@@ -2,7 +2,7 @@
 using Cytrus.Download;
 using Spectre.Console;
 
-namespace Cytrus.Cli;
+namespace Cytrus.Cli.Download;
 
 public sealed class SpectreProgressSink(ProgressContext context) : IDownloadProgressSink
 {
