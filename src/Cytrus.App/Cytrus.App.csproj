@@ -4,10 +4,11 @@
     <OutputType>WinExe</OutputType>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
   </PropertyGroup>
 
   <ItemGroup>
-    <AvaloniaResource Include="Assets\**"/>
+    <ProjectReference Include="..\Cytrus\Cytrus.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,6 +19,10 @@
 
   <ItemGroup>
     <PackageReference Include="ShadUI" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\**"/>
   </ItemGroup>
 
 </Project>
