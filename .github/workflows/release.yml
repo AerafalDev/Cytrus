@@ -1,0 +1,92 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    name: Publish ${{ matrix.rid }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { rid: win-x64,   os: windows-latest }
+          - { rid: linux-x64, os: ubuntu-latest }
+          - { rid: osx-x64,   os: macos-13 }
+          - { rid: osx-arm64, os: macos-latest }
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Resolve version
+        shell: bash
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
+            echo "VERSION=${GITHUB_REF_NAME#v}" >> "$GITHUB_ENV"
+          else
+            echo "VERSION=0.0.0-dev" >> "$GITHUB_ENV"
+          fi
+
+      - name: Publish CLI and app
+        shell: bash
+        run: |
+          common="-c Release -r ${{ matrix.rid }} --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:Version=$VERSION"
+          dotnet publish src/Cytrus.Cli/Cytrus.Cli.csproj $common -o dist/cli
+          dotnet publish src/Cytrus.App/Cytrus.App.csproj $common -o dist/app
+          rm -f dist/cli/*.pdb dist/app/*.pdb
+
+      - name: Name the CLI binary 'cytrus'
+        shell: bash
+        run: |
+          if [[ "${{ matrix.rid }}" == win-* ]]; then
+            mv dist/cli/Cytrus.Cli.exe dist/cli/cytrus.exe
+          else
+            mv dist/cli/Cytrus.Cli dist/cli/cytrus
+            chmod +x dist/cli/cytrus dist/app/cytrus-gui
+          fi
+
+      - name: Package (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force artifacts | Out-Null
+          Compress-Archive -Path dist/cli/* -DestinationPath "artifacts/cytrus-cli-$env:VERSION-${{ matrix.rid }}.zip"
+          Compress-Archive -Path dist/app/* -DestinationPath "artifacts/cytrus-app-$env:VERSION-${{ matrix.rid }}.zip"
+
+      - name: Package (Unix)
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          mkdir -p artifacts
+          tar -C dist/cli -czf "artifacts/cytrus-cli-$VERSION-${{ matrix.rid }}.tar.gz" .
+          tar -C dist/app -czf "artifacts/cytrus-app-$VERSION-${{ matrix.rid }}.tar.gz" .
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cytrus-${{ matrix.rid }}
+          path: artifacts/*
+
+  release:
+    name: Create GitHub release
+    needs: publish
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/*
+          generate_release_notes: true
