@@ -80,7 +80,7 @@ jobs:
           tar -C dist/cli -czf "artifacts/cytrus-cli-$VERSION-${{ matrix.rid }}.tar.gz" .
           tar -C dist/app -czf "artifacts/cytrus-app-$VERSION-${{ matrix.rid }}.tar.gz" .
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: cytrus-${{ matrix.rid }}
           path: artifacts/*
