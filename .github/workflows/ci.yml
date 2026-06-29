@@ -20,7 +20,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
@@ -36,7 +36,7 @@ jobs:
       - name: Test
         run: dotnet test --configuration Release --no-build --verbosity normal --filter "Category!=Integration" --logger "trx;LogFileName=test-results.trx"
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: test-results-${{ matrix.os }}
