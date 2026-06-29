@@ -8,6 +8,8 @@ It's a .NET 10 rewrite of the original `cytrus-v6` Node tool. The download engin
 
 > Unofficial project. Not affiliated with or endorsed by Ankama. Downloads come straight from the public CDN — use it within their terms of service.
 
+<img src="Cytrus.png" alt="Cytrus preview" />
+
 ## Install
 
 Each [release](../../releases) ships self‑contained binaries for Windows, Linux and macOS (x64 and Apple Silicon). They bundle the runtime, so nothing else needs to be installed.
