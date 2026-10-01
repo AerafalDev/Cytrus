@@ -14,7 +14,7 @@ public sealed class VersionsCommand(ICytrusCdnClient cdn) : AsyncCommand<Version
         public string? Game { get; init; }
     }
 
-    protected override async Task<int> ExecuteAsync(CommandContext context, Settings settings, CancellationToken cancellationToken)
+    public override async Task<int> ExecuteAsync(CommandContext context, Settings settings, CancellationToken cancellationToken)
     {
         var index = await cdn.GetIndexAsync(cancellationToken).ConfigureAwait(false);
         var table = new Table().Border(TableBorder.Rounded);

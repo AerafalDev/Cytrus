@@ -13,6 +13,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.inputs.tag || github.ref_name }}
+  cancel-in-progress: true
+
 jobs:
   publish:
     name: Publish ${{ matrix.rid }}
@@ -30,7 +34,10 @@ jobs:
 
       - uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: 10.0.x
+          # FlatSharp.Compiler 7.9 (latest) runs its code generator on a .NET 6-9 runtime.
+          dotnet-version: |
+            9.0.x
+            10.0.x
 
       - name: Resolve version
         shell: bash

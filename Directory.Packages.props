@@ -6,11 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageVersion Include="coverlet.collector" Version="6.0.4" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
-    <PackageVersion Include="NSubstitute" Version="5.3.0" />
+    <PackageVersion Include="coverlet.collector" Version="10.1.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
+    <PackageVersion Include="NSubstitute" Version="6.2.0" />
     <PackageVersion Include="xunit" Version="2.9.3" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.4" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="4.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,8 +25,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageVersion Include="Spectre.Console" Version="0.55.0" />
-    <PackageVersion Include="Spectre.Console.Cli" Version="0.55.0" />
+    <PackageVersion Include="Spectre.Console" Version="0.57.2" />
+    <PackageVersion Include="Spectre.Console.Cli" Version="0.57.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,13 +38,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageVersion Include="Avalonia" Version="12.0.4" />
-    <PackageVersion Include="Avalonia.Desktop" Version="12.0.4" />
-    <PackageVersion Include="Avalonia.Fonts.Inter" Version="12.0.4" />
+    <PackageVersion Include="Avalonia" Version="12.1.3" />
+    <PackageVersion Include="Avalonia.Desktop" Version="12.1.3" />
+    <PackageVersion Include="Avalonia.Fonts.Inter" Version="12.1.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageVersion Include="ShadUI" Version="0.2.3" />
+    <PackageVersion Include="ShadUI" Version="0.2.4" />
   </ItemGroup>
 
 </Project>
