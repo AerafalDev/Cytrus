@@ -1,8 +1,12 @@
-*          text=auto
+# Store text files with LF line endings and check them out with the platform's native ones.
+# Forcing CRLF here made Dependabot commit CRLF blobs, which turned every update into a whole-file diff.
+* text=auto
 
-*.cs       text diff=csharp
-*.cshtml   text diff=html
-*.csx      text diff=csharp
-*.sln      text eol=crlf
-*.slnx     text eol=crlf
-*.csproj   text eol=crlf
+*.cs     diff=csharp
+*.cshtml diff=html
+*.csx    diff=csharp
+
+# Scripts whose interpreter requires a specific line ending.
+*.sh     text eol=lf
+*.cmd    text eol=crlf
+*.bat    text eol=crlf
