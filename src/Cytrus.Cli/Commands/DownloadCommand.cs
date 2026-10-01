@@ -41,7 +41,7 @@ public sealed class DownloadCommand(IGameDownloader downloader) : AsyncCommand<D
         public bool Force { get; init; }
     }
 
-    protected override async Task<int> ExecuteAsync(CommandContext context, Settings settings, CancellationToken cancellationToken)
+    public override async Task<int> ExecuteAsync(CommandContext context, Settings settings, CancellationToken cancellationToken)
     {
         GameCoordinates coordinates;
 
