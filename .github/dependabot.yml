@@ -1,36 +1,44 @@
 version: 2
 
 updates:
-  - package-ecosystem: "github-actions"
-    directory: ".github/workflows"
+  - package-ecosystem: "nuget"
+    directory: "/"
+    target-branch: "main"
     schedule:
       interval: "weekly"
       day: "monday"
       time: "06:00"
       timezone: "Europe/Paris"
     open-pull-requests-limit: 10
-    reviewers:
-      - "AerafalGit"
     commit-message:
-      prefix: "ci"
-      include: "scope"
-    labels:
-      - "dependencies"
-      - "github-actions"
+      prefix: "build(deps)"
+    groups:
+      avalonia:
+        patterns: ["Avalonia", "Avalonia.*", "ShadUI"]
+      community-toolkit:
+        patterns: ["CommunityToolkit.*"]
+      flatsharp:
+        patterns: ["FlatSharp.*"]
+      spectre-console:
+        patterns: ["Spectre.Console", "Spectre.Console.*"]
+      nuget-minor-and-patch:
+        update-types: ["minor", "patch"]
 
-  - package-ecosystem: "nuget"
-    directory: "src"
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    target-branch: "main"
     schedule:
       interval: "weekly"
       day: "monday"
-      time: "06:30"
+      time: "06:00"
       timezone: "Europe/Paris"
     open-pull-requests-limit: 10
-    reviewers:
-      - "AerafalGit"
     commit-message:
-      prefix: "deps"
-      include: "scope"
-    labels:
-      - "dependencies"
-      - "nuget"
+      prefix: "ci(deps)"
+    groups:
+      github-actions:
+        patterns: ["*"]
+    ignore:
+      # Track the floating major tag (@v4) instead of pinning every minor/patch release.
+      - dependency-name: "github/codeql-action"
+        update-types: ["version-update:semver-minor", "version-update:semver-patch"]
