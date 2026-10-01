@@ -61,7 +61,7 @@ public sealed class GameDownloaderTests : IDisposable
     public async Task DownloadsAndVerifiesAllFileShapesOffline()
     {
         var (cdn, expected) = BuildGame();
-        var result = await NewDownloader(cdn).DownloadAsync(Request());
+        var result = await NewDownloader(cdn).DownloadAsync(Request(), TestContext.Current.CancellationToken);
 
         Assert.Equal(4, result.FilesWritten);
 
@@ -69,7 +69,7 @@ public sealed class GameDownloaderTests : IDisposable
         {
             var path = Path.Combine(_out, name.Replace('/', Path.DirectorySeparatorChar));
             Assert.True(File.Exists(path), $"missing {name}");
-            Assert.Equal(content, await File.ReadAllBytesAsync(path));
+            Assert.Equal(content, await File.ReadAllBytesAsync(path, TestContext.Current.CancellationToken));
         }
     }
 
@@ -77,17 +77,17 @@ public sealed class GameDownloaderTests : IDisposable
     public async Task CrossBundleFilePullsFromBothBundles()
     {
         var (cdn, _) = BuildGame();
-        await NewDownloader(cdn).DownloadAsync(Request(["**/cross.bin"]));
+        await NewDownloader(cdn).DownloadAsync(Request(["**/cross.bin"]), TestContext.Current.CancellationToken);
 
         Assert.True(cdn.RangeRequests >= 2);
-        Assert.Equal(Bytes(40, 200).Concat(Bytes(25, 7)), await File.ReadAllBytesAsync(Path.Combine(_out, "cross", "cross.bin")));
+        Assert.Equal(Bytes(40, 200).Concat(Bytes(25, 7)), await File.ReadAllBytesAsync(Path.Combine(_out, "cross", "cross.bin"), TestContext.Current.CancellationToken));
     }
 
     [Fact]
     public async Task SelectionLimitsToMatchingFilesAndBundles()
     {
         var (cdn, _) = BuildGame();
-        var result = await NewDownloader(cdn).DownloadAsync(Request(["**/multi.bin"]));
+        var result = await NewDownloader(cdn).DownloadAsync(Request(["**/multi.bin"]), TestContext.Current.CancellationToken);
 
         Assert.Equal(1, result.FilesWritten);
         Assert.True(File.Exists(Path.Combine(_out, "data", "multi.bin")));
@@ -99,7 +99,7 @@ public sealed class GameDownloaderTests : IDisposable
     public async Task EmptySelectionMatchWritesNothing()
     {
         var (cdn, _) = BuildGame();
-        var result = await NewDownloader(cdn).DownloadAsync(Request(["**/*.nomatch"]));
+        var result = await NewDownloader(cdn).DownloadAsync(Request(["**/*.nomatch"]), TestContext.Current.CancellationToken);
 
         Assert.Equal(0, result.FilesWritten);
         Assert.Equal(0, cdn.RangeRequests);
