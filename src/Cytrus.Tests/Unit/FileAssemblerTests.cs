@@ -39,10 +39,10 @@ public sealed class FileAssemblerTests : IDisposable
         var file = new FileEntry("dir/out.bin", bundleBytes.Length, Sha1(bundleBytes), [], false, null);
         var plan = new FilePlan(file, placements);
 
-        var result = await _assembler.AssembleAsync(plan, store, _root, AssemblyOptions.Default);
+        var result = await _assembler.AssembleAsync(plan, store, _root, AssemblyOptions.Default, TestContext.Current.CancellationToken);
 
         Assert.Equal(FileAssemblyStatus.Written, result.Status);
-        var written = await File.ReadAllBytesAsync(Path.Combine(_root, "dir", "out.bin"));
+        var written = await File.ReadAllBytesAsync(Path.Combine(_root, "dir", "out.bin"), TestContext.Current.CancellationToken);
         Assert.Equal(bundleBytes, written);
     }
 
@@ -58,10 +58,10 @@ public sealed class FileAssemblerTests : IDisposable
         var placements = new[] { new ChunkPlacement(bundleHash, 0, content.Length, fileHash) };
         var file = new FileEntry("single.bin", content.Length, fileHash, [], false, null);
 
-        var result = await _assembler.AssembleAsync(new FilePlan(file, placements), store, _root, AssemblyOptions.Default);
+        var result = await _assembler.AssembleAsync(new FilePlan(file, placements), store, _root, AssemblyOptions.Default, TestContext.Current.CancellationToken);
 
         Assert.Equal(FileAssemblyStatus.Written, result.Status);
-        Assert.Equal(content, await File.ReadAllBytesAsync(Path.Combine(_root, "single.bin")));
+        Assert.Equal(content, await File.ReadAllBytesAsync(Path.Combine(_root, "single.bin"), TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -77,7 +77,7 @@ public sealed class FileAssemblerTests : IDisposable
         var placements = new[] { new ChunkPlacement(bundleHash, 0, expected.Length, Sha1(expected)) };
         var file = new FileEntry("bad.bin", expected.Length, Sha1(expected), [], false, null);
 
-        await Assert.ThrowsAsync<IntegrityException>(() => _assembler.AssembleAsync(new FilePlan(file, placements), store, _root, AssemblyOptions.Default));
+        await Assert.ThrowsAsync<IntegrityException>(() => _assembler.AssembleAsync(new FilePlan(file, placements), store, _root, AssemblyOptions.Default, TestContext.Current.CancellationToken));
 
         Assert.False(File.Exists(Path.Combine(_root, "bad.bin")));
         Assert.False(File.Exists(Path.Combine(_root, "bad.bin.cytmp")));
@@ -95,7 +95,7 @@ public sealed class FileAssemblerTests : IDisposable
         var file = new FileEntry("mismatch.bin", corrupted.Length, Sha1([0, 0, 0, 0]), [], false, null);
         var options = AssemblyOptions.Default with { VerifyChunks = false };
 
-        await Assert.ThrowsAsync<IntegrityException>(() => _assembler.AssembleAsync(new FilePlan(file, placements), store, _root, options));
+        await Assert.ThrowsAsync<IntegrityException>(() => _assembler.AssembleAsync(new FilePlan(file, placements), store, _root, options, TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -110,8 +110,8 @@ public sealed class FileAssemblerTests : IDisposable
         var file = new FileEntry("dup.bin", content.Length, Sha1(content), [], false, null);
         var plan = new FilePlan(file, placements);
 
-        var first = await _assembler.AssembleAsync(plan, store, _root, AssemblyOptions.Default);
-        var second = await _assembler.AssembleAsync(plan, store, _root, AssemblyOptions.Default);
+        var first = await _assembler.AssembleAsync(plan, store, _root, AssemblyOptions.Default, TestContext.Current.CancellationToken);
+        var second = await _assembler.AssembleAsync(plan, store, _root, AssemblyOptions.Default, TestContext.Current.CancellationToken);
 
         Assert.Equal(FileAssemblyStatus.Written, first.Status);
         Assert.Equal(FileAssemblyStatus.Skipped, second.Status);
@@ -122,11 +122,11 @@ public sealed class FileAssemblerTests : IDisposable
     {
         var store = new InMemoryBundleStore();
         var file = new FileEntry("empty.dat", 0, default, [], false, null);
-        var result = await _assembler.AssembleAsync(new FilePlan(file, []), store, _root, AssemblyOptions.Default);
+        var result = await _assembler.AssembleAsync(new FilePlan(file, []), store, _root, AssemblyOptions.Default, TestContext.Current.CancellationToken);
 
         Assert.Equal(FileAssemblyStatus.Written, result.Status);
         Assert.True(File.Exists(Path.Combine(_root, "empty.dat")));
-        Assert.Empty(await File.ReadAllBytesAsync(Path.Combine(_root, "empty.dat")));
+        Assert.Empty(await File.ReadAllBytesAsync(Path.Combine(_root, "empty.dat"), TestContext.Current.CancellationToken));
     }
 
     public void Dispose()

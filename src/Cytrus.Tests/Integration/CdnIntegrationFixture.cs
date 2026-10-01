@@ -27,7 +27,7 @@ public sealed partial class CdnIntegrationFixture : IAsyncLifetime
     public IEnumerable<FileEntry> AllFiles =>
         Manifest.Fragments.SelectMany(static f => f.Files).Where(static f => SafeName().IsMatch(f.Name) && !f.IsSymlink);
 
-    public async Task InitializeAsync()
+    public async ValueTask InitializeAsync()
     {
         var services = new ServiceCollection();
         services.AddLogging();
@@ -42,10 +42,10 @@ public sealed partial class CdnIntegrationFixture : IAsyncLifetime
         Manifest = reader.Read(bytes);
     }
 
-    public Task DisposeAsync()
+    public ValueTask DisposeAsync()
     {
         Provider.Dispose();
-        return Task.CompletedTask;
+        return ValueTask.CompletedTask;
     }
 
     public FileEntry SmallestNonEmptyFile()

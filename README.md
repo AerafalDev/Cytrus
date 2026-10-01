@@ -87,24 +87,24 @@ src/
   Cytrus/        core library: CDN client, manifest reader, planner, assembler
   Cytrus.Cli/    Spectre.Console command-line front-end  (binary: cytrus)
   Cytrus.App/    Avalonia desktop front-end              (binary: cytrus-gui)
-  Cytrus.Tests/  xUnit unit + integration tests
+  Cytrus.Tests/  xUnit v3 unit + integration tests
 ```
 
 Everything behind `src/Cytrus` is split by responsibility and wired through interfaces, so the front‑ends only touch `IGameDownloader` / `ICytrusCdnClient` and `AddCytrus()`.
 
 ## Development
 
-Requires the .NET 10 SDK.
+Requires the .NET 10 SDK, plus the .NET 9 runtime for the FlatBuffers code generator (FlatSharp).
 
 ```sh
 dotnet build Cytrus.slnx -c Release
-dotnet test  src/Cytrus.Tests/Cytrus.Tests.csproj --filter "Category!=Integration"
+dotnet test  --project src/Cytrus.Tests/Cytrus.Tests.csproj --filter-not-trait "Category=Integration"
 ```
 
 The integration suite downloads real files from the CDN and verifies them end to end. It's excluded from the default run and from CI; run it explicitly when you want to exercise the network path:
 
 ```sh
-dotnet test src/Cytrus.Tests/Cytrus.Tests.csproj --filter "Category=Integration"
+dotnet test --project src/Cytrus.Tests/Cytrus.Tests.csproj --filter-trait "Category=Integration"
 ```
 
 CI (`.github/workflows/ci.yml`) builds and runs the unit tests on Linux, Windows and macOS. Pushing a `v*` tag triggers `release.yml`, which publishes the self‑contained CLI and app for every platform and attaches the archives to a GitHub release.

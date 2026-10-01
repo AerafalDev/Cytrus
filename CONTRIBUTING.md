@@ -15,12 +15,13 @@ so install that runtime as well.
 git clone https://github.com/AerafalDev/Cytrus.git
 cd Cytrus
 
-dotnet build -c Release                                      # build every project
-dotnet test  -c Release --filter "Category!=Integration"     # run the offline test suite
+dotnet build -c Release                                          # build every project
+dotnet test  -c Release --filter-not-trait "Category=Integration"   # run the offline test suite
 ```
 
 Tests marked `[Trait("Category", "Integration")]` download from the live CDN; CI skips them, run them locally
-when you touch the download path.
+(`--filter-trait "Category=Integration"`) when you touch the download path. The suite uses xUnit v3 on
+Microsoft.Testing.Platform, which `global.json` enables for `dotnet test`.
 
 ## Layout
 
@@ -28,7 +29,7 @@ when you touch the download path.
   planning, chunk fetching, SHA-1 verification and atomic writes.
 - `src/Cytrus.Cli` — the `cytrus` command line ([Spectre.Console](https://spectreconsole.net/)).
 - `src/Cytrus.App` — the desktop app ([Avalonia](https://avaloniaui.net/)).
-- `src/Cytrus.Tests` — the xUnit test suite.
+- `src/Cytrus.Tests` — the xUnit v3 test suite.
 
 Keep behaviour in the engine: the CLI and the app should stay thin so they behave identically.
 
@@ -46,7 +47,7 @@ Files are **UTF-8 (no BOM)**, stored with LF line endings and checked out with y
 
 - Branch off `main`; keep each change small and self-contained.
 - Write clear, present-tense commit messages — one logical change per commit.
-- Make sure `dotnet build -c Release` and `dotnet test -c Release --filter "Category!=Integration"` are green.
+- Make sure `dotnet build -c Release` and `dotnet test -c Release --filter-not-trait "Category=Integration"` are green.
 - Describe *what* changed and *why*.
 
 ## Reporting bugs

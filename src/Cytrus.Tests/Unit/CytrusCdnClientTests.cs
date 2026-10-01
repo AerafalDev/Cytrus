@@ -33,7 +33,7 @@ public sealed class CytrusCdnClientTests
         var payload = new byte[] { 1, 2, 3, 4 };
         var (client, handler) = Create((_, _) => Ok(payload));
 
-        var bytes = await client.GetManifestAsync(new GameCoordinates("dofus", "windows", "dofus3", "6.0_3.5.17.26"));
+        var bytes = await client.GetManifestAsync(new GameCoordinates("dofus", "windows", "dofus3", "6.0_3.5.17.26"), TestContext.Current.CancellationToken);
 
         Assert.Equal(payload, bytes);
         Assert.Equal("/dofus/releases/dofus3/windows/6.0_3.5.17.26.manifest", handler.Requests[0].RequestUri!.AbsolutePath);
@@ -49,7 +49,7 @@ public sealed class CytrusCdnClientTests
 
         var (client, _) = Create((_, _) => Ok(Encoding.UTF8.GetBytes(json)));
 
-        var index = await client.GetIndexAsync();
+        var index = await client.GetIndexAsync(TestContext.Current.CancellationToken);
 
         Assert.Equal("6.0_3.5.17.26", index.ResolveVersion("dofus", "windows", "dofus3"));
         Assert.Null(index.ResolveVersion("dofus", "windows", "beta"));
@@ -77,7 +77,7 @@ public sealed class CytrusCdnClientTests
             using var ms = new MemoryStream();
             await stream.CopyToAsync(ms, ct);
             body = ms.ToArray();
-        });
+        }, TestContext.Current.CancellationToken);
 
         Assert.Equal(10, captured.Start);
         Assert.Equal(10, captured.Length);
@@ -98,7 +98,7 @@ public sealed class CytrusCdnClientTests
         {
             captured = dr;
             return Task.CompletedTask;
-        });
+        }, TestContext.Current.CancellationToken);
 
         Assert.True(captured.WholeBundleReturned);
         Assert.Equal(0, captured.Start);
@@ -110,7 +110,7 @@ public sealed class CytrusCdnClientTests
     {
         var (client, handler) = Create((_, _) => new HttpResponseMessage(HttpStatusCode.NotFound));
 
-        var ex = await Assert.ThrowsAsync<CdnRequestException>(() => client.GetManifestAsync(new GameCoordinates("dofus", "windows", "main", "9.9_9.9.9.9")));
+        var ex = await Assert.ThrowsAsync<CdnRequestException>(() => client.GetManifestAsync(new GameCoordinates("dofus", "windows", "main", "9.9_9.9.9.9"), TestContext.Current.CancellationToken));
 
         Assert.Equal(HttpStatusCode.NotFound, ex.StatusCode);
         Assert.Single(handler.Requests);
@@ -122,7 +122,7 @@ public sealed class CytrusCdnClientTests
         var payload = new byte[] { 7 };
         var (client, handler) = Create((_, attempt) => attempt is 1 ? new HttpResponseMessage(HttpStatusCode.InternalServerError) : Ok(payload));
 
-        var bytes = await client.GetManifestAsync(new GameCoordinates("dofus", "windows", "main", "6.0_2.73.3.14"));
+        var bytes = await client.GetManifestAsync(new GameCoordinates("dofus", "windows", "main", "6.0_2.73.3.14"), TestContext.Current.CancellationToken);
 
         Assert.Equal(payload, bytes);
         Assert.Equal(2, handler.Requests.Count);
